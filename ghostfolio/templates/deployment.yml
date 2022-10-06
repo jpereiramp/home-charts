@@ -46,12 +46,6 @@ spec:
               value: "production"
           image: "ghcr.io/jpereiramp/ghostfolio:{{ .Values.ghostfolio.image.tag }}"
           imagePullPolicy: Always
-          readinessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.ghostfolio.port }}
-            initialDelaySeconds: 15
-            periodSeconds: 5
           ports:
             - name: ghostfolio-http
               containerPort: {{ .Values.ghostfolio.port }}
