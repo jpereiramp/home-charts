@@ -41,7 +41,7 @@ spec:
             - name: REDIS_PASSWORD
               value: {{ .Values.ghostfolio.redis.password | quote }}
             - name: REDIS_PORT
-              value: {{ .Values.ghostfolio.redis.port }}
+              value: {{ .Values.ghostfolio.redis.port | quote }}
             - name: NODE_ENV
               value: "production"
           image: "ghcr.io/jpereiramp/ghostfolio:{{ .Values.ghostfolio.image.tag }}"
