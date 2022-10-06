@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 1.201.1
+description: A Helm chart for Ghostfolio
+name: ghostfolio
+type: application
+version: 0.0.1

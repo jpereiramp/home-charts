@@ -1,0 +1,25 @@
+ghostfolio:
+  image:
+    tag: 1.201.0
+  port: 3333
+  accessTokenSalt: changeme
+  jwtSecretKey: changeme
+  postgres:
+    host: postgres.namespace
+    port: 5432
+    database: ghostfolio
+    user: db
+    password: changeme
+  redis:
+    host: redis.namespace
+    password: changeme
+    port: 6379
+
+service:
+  http:
+    type: ClusterIP
+    port: 3333
+
+ingress:
+  host: my-host.com
+  path: /

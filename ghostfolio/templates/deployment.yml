@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghostfolio
+  labels:
+    {{- include "ghostfolio.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ghostfolio.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ghostfolio.selectorLabels" . | nindent 8 }}
+        app: ghostfolio
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          env:
+            - name: ACCESS_TOKEN_SALT
+              value: {{ .Values.ghostfolio.accessTokenSalt }}
+            - name: BASE_CURRENCY
+              value: {{ .Values.ghostfolio.accessTokenSalt }}
+            - name: HOST
+              value: localhost
+            - name: PORT
+              value: {{ .Values.ghostfolio.port | quote }}
+            - name: JWT_SECRET_KEY
+              value: {{ .Values.ghostfolio.jwtSecretKey }}
+            - name: DATABASE_URL
+              value: {{ .Values.ghostfolio.postgres.url }}
+            - name: POSTGRES_DB
+              value: {{ .Values.ghostfolio.postgres.database }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.ghostfolio.postgres.password }}
+            - name: POSTGRES_USER
+              value: {{ .Values.ghostfolio.postgres.user }}
+            - name: REDIS_HOST
+              value: {{ .Values.ghostfolio.redis.host }}
+            - name: REDIS_PASSWORD
+              value: {{ .Values.ghostfolio.redis.password | quote }}
+            - name: REDIS_PORT
+              value: {{ .Values.ghostfolio.redis.port }}
+            - name: NODE_ENV
+              value: "production"
+          image: "ghcr.io/jpereiramp/ghostfolio:{{ .Values.ghostfolio.image.tag }}"
+          imagePullPolicy: Always
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.ghostfolio.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          ports:
+            - name: ghostfolio-http
+              containerPort: {{ .Values.ghostfolio.port }}
+              protocol: TCP
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
